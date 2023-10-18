@@ -1,0 +1,48 @@
+name: Build and Deploy Android
+
+on:
+  push:
+    branches:
+      - driver-branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: "11"
+          distribution: "adopt"
+          cache: "gradle"
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install --force
+
+      - name: Bundle the app
+        run: npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res
+     
+      - name: Set Gradlew Permissions
+        run: chmod +x android/gradlew
+        
+      - name: Doing Test
+        run: npm test
+        
+      - name: Build application
+        run: |
+          cd ./android
+          ./gradlew assembleDebug
+      - name: Upload application
+        uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: android/app/build/outputs/apk/debug/app-debug.apk
