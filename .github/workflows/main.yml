@@ -59,7 +59,7 @@ jobs:
         with:
           credentials: ${{ secrets.credentials }}
           filename: "archive.zip"
-          folderId: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94?submissionGuid=5222fb56-94f5-45e9-9f8b-277f03d1e52f
+          folderId: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94
           overwrite: "true" # optional boolean
       - name: Make Directory Structure
         run: |
