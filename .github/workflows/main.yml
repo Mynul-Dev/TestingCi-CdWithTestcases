@@ -1,9 +1,8 @@
 name: Build and Deploy Android
-
-on:
+on:  
   push:
-    branches:
-      - main
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -45,7 +44,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
          name: Build
-         path: dist    
+         path: android/app/build/outputs/apk/debug/app-debug.apk    
   deploy:
     needs: build
     permissions:
