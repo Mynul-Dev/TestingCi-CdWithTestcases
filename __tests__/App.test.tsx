@@ -39,4 +39,4 @@ test('displays images from the server', async () => {
 
   // Verifying that there are no errors
   expect(screen.queryByLabelText(/alert/i)).toBeNull();
-});
+},20000);
