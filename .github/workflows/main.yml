@@ -43,18 +43,27 @@ jobs:
           ./gradlew assemble
       - name: Upload application
         uses: actions/upload-artifact@v2
-        id: create_release
         with:
-          name: release
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: app-release.apk
+          path: android/app/build/outputs/apk/release/
 
-      - name: Upload to gdrive
-        uses: adityak74/google-drive-upload-git-action@main
+
+      # - name: Upload to gdrive
+      #   uses: adityak74/google-drive-upload-git-action@main
+      #   with:
+      #     credentials: ${{ secrets.credentials }}
+      #     filename: "android/app/build/outputs/apk/debug/app-debug.apk"
+      #     folderId: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94
+      #     overwrite: "true" # optional boolean
+      - name: Download application
+        uses: actions/download-artifact@v3
+        id: download
         with:
-          credentials: ${{ secrets.credentials }}
-          filename: "android/app/build/outputs/apk/debug/app-debug.apk"
-          folderId: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94
-          overwrite: "true" # optional boolean
+         name: 'my-artifact'
+         path: path/to/artifacts
+
+      - name: 'Echo download path'
+        run: echo ${{steps.download.outputs.download-path}}
 
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
@@ -66,5 +75,5 @@ jobs:
           subject: "Build and Deploy Notification"
           to: mynulislamridoy@gmail.com
           from: homeexercise8@gmail.com
-          body: "The build is complete. You can download the APK from "
+          body: ${{steps.download.outputs.download-path}}
 
