@@ -41,11 +41,7 @@ jobs:
         run: |
           cd ./android
           ./gradlew assemble
-      - name: Upload application
-        uses: actions/upload-artifact@v2
-        with:
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/
+          
       - name: Upload application
         uses: actions/upload-artifact@v2
         id: create_release
