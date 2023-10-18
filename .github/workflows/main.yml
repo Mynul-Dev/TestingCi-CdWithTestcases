@@ -46,3 +46,25 @@ jobs:
         with:
           name: release
           path: android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload public folder to Google Drive
+        uses: Jodebu/upload-to-drive@master
+        id: driveUpload
+        with:
+            target: public
+            credentials: ${{ secrets.CREDENTIALS}}
+            folder: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94?submissionGuid=5222fb56-94f5-45e9-9f8b-277f03d1e52f
+      - name: Send Email Notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          secure: true
+          username: ${{secrets.SMTP_USERNAME}}
+          password: ${{secrets.SMTP_PASSWORD}}
+          subject: "Build and Deploy Notification"
+          to: mynulislamridoy@gmail.com
+          # Required sender full name (address can be skipped):
+          from: homeexercise8@gmail.com
+          # <user@example.com>
+          body: "The build is complete. You can download the APK from ${{ steps.driveUpload.outputs.link }}"
+
