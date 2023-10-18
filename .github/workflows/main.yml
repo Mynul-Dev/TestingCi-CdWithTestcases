@@ -46,15 +46,23 @@ jobs:
         with:
          name: Build
          path: dist    
-      - uses: actions/download-artifact@v3
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+      
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
         id: download
         with:
           name: Build
           path: build
+                
       - run: zip -r build.zip build/
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "build.zip"
+         artifacts: "build.zip"
+      
       # - name: Upload application
       #   uses: actions/upload-artifact@v2
       #   id: create_release
@@ -84,3 +92,6 @@ jobs:
           from: homeexercise8@gmail.com
           body: ${{steps.download.outputs.download-path}}
 
+
+
+          
