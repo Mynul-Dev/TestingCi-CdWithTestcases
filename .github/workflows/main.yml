@@ -62,6 +62,8 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
          artifacts: "build.zip"
+         allowUpdates: true
+         
       
       # - name: Upload application
       #   uses: actions/upload-artifact@v2
