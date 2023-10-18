@@ -48,6 +48,8 @@ jobs:
          path: dist    
   deploy:
     needs: build
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
       
     steps:
@@ -56,8 +58,7 @@ jobs:
         id: download
         with:
           name: Build
-          path: build
-                
+          path: build              
       - run: zip -r build.zip build/
       - uses: ncipollo/release-action@v1
         with:
