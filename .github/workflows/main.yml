@@ -47,7 +47,8 @@ jobs:
         with:
           name: release
           path: android/app/build/outputs/apk/debug/app-debug.apk
-
+          # Server port, default 25:
+          # Optional whether this connection use TLS (default is true if server_port is 465)
       # - name: Upload public folder to Google Drive
       #   uses: Jodebu/upload-to-drive@master
       #   id: driveUpload
@@ -58,9 +59,9 @@ jobs:
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: ${{ secrets.SMTP_PORT }}
-          secure: true
+          server_address: smtp.gmail.com
+          server_port: 587
+          # secure: true
           username: ${{secrets.SMTP_USERNAME}}
           password: ${{secrets.SMTP_PASSWORD}}
           subject: "Build and Deploy Notification"
