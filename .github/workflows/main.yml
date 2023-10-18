@@ -47,51 +47,24 @@ jobs:
         with:
           name: release
           path: android/app/build/outputs/apk/debug/app-debug.apk
-      # - name: Archive files
-      #   run: |
-      #       sudo apt-get update
-      #       sudo apt-get install zip
-      #       zip -r archive.zip *
-          # Server port, default 25:
-          # Optional whether this connection use TLS (default is true if server_port is 465)
+
       - name: Upload to gdrive
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.credentials }}
-          filename: "release"
+          filename: "release/*.apk"
           folderId: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94
           overwrite: "true" # optional boolean
-      # - name: Make Directory Structure
-      #   run: |
-      #       mkdir -p w/x/y
-      #       date +%s > w/x/y/z
-      # - name: Mirror Directory Structure
-      #   uses: adityak74/google-drive-upload-git-action@main
-      #   with:
-      #     credentials: ${{ secrets.credentials }}
-      #     filename: w/x/y/z
-      #     folderId: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94?submissionGuid=5222fb56-94f5-45e9-9f8b-277f03d1e52f
-      #     overwrite: "true"
-      #     mirrorDirectoryStructure: "true"    
-      # - name: Upload public folder to Google Drive
-      #   uses: Jodebu/upload-to-drive@master
-      #   id: driveUpload
-      #   with:
-      #       target: android/app/build/outputs/apk/debug/app-debug.apk
-      #       credentials: ${{ secrets.CREDENTIALS}}
-      #       folder: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94?submissionGuid=5222fb56-94f5-45e9-9f8b-277f03d1e52f
+
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 587
-          # secure: true
           username: mynulislamridoy
           password: ${{secrets.SMTP_PASSWORD}}
           subject: "Build and Deploy Notification"
           to: mynulislamridoy@gmail.com
-          # Required sender full name (address can be skipped):
           from: homeexercise8@gmail.com
-          # <user@example.com>
           body: "The build is complete. You can download the APK from "
 
