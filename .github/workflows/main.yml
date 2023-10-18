@@ -58,9 +58,8 @@ jobs:
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.credentials }}
-          filename: "archive.zip"
+          filename: "release.zip"
           folderId: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94?submissionGuid=5222fb56-94f5-45e9-9f8b-277f03d1e52f
-          name: "documentation.zip" # optional string
           overwrite: "true" # optional boolean
       - name: Make Directory Structure
         run: |
