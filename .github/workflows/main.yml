@@ -41,27 +41,33 @@ jobs:
         run: |
           cd ./android
           ./gradlew assemble
-          
-      - name: Upload application
-        uses: actions/upload-artifact@v2
-        id: create_release
+
+      - uses: actions/upload-artifact@v3
         with:
          name: Build
-         path: dist
-
-      # - name: Upload to gdrive
-      #   uses: adityak74/google-drive-upload-git-action@main
-      #   with:
-      #     credentials: ${{ secrets.credentials }}
-      #     filename: "android/app/build/outputs/apk/debug/app-debug.apk"
-      #     folderId: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94
-      #     overwrite: "true" # optional boolean
-      - name: Download application
-        uses: actions/download-artifact@v3
+         path: dist    
+      - uses: actions/download-artifact@v3
         id: download
         with:
-         name: Build
-         path: build
+          name: Build
+          path: build
+      - run: zip -r build.zip build/
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build.zip"
+      # - name: Upload application
+      #   uses: actions/upload-artifact@v2
+      #   id: create_release
+      #   with:
+      #    name: Build
+      #    path: dist
+
+      # - name: Download application
+      #   uses: actions/download-artifact@v3
+      #   id: download
+      #   with:
+      #    name: Build
+      #    path: build
 
       - name: 'Echo download path'
         run: echo ${{steps.download.outputs.download-path}}
