@@ -3,7 +3,7 @@ name: Build and Deploy Android
 on:
   push:
     branches:
-      - driver-branch
+      - main
 
 jobs:
   build:
