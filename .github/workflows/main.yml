@@ -41,12 +41,12 @@ jobs:
         run: |
           cd ./android
           ./gradlew assemble
-      - name: Upload application
-        uses: actions/upload-artifact@v2
-        id: create_release
-        with:
-          name: release
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+      # - name: Upload application
+      #   uses: actions/upload-artifact@v2
+      #   id: create_release
+      #   with:
+      #     name: release
+      #     path: android/app/build/outputs/apk/debug/app-debug.apk
       - name: Archive files
         run: |
             sudo apt-get update
@@ -58,7 +58,7 @@ jobs:
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.credentials }}
-          filename: "android/app/build/outputs/apk/debug/app-debug.apk"
+          filename: "archive.zip"
           folderId: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94?submissionGuid=5222fb56-94f5-45e9-9f8b-277f03d1e52f
           overwrite: "true" # optional boolean
       - name: Make Directory Structure
