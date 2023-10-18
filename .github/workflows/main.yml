@@ -46,7 +46,12 @@ jobs:
         with:
           name: app-release.apk
           path: android/app/build/outputs/apk/release/
-
+      - name: Upload application
+        uses: actions/upload-artifact@v2
+        id: create_release
+        with:
+          name: release
+          path: android/app/build/outputs/apk/debug/app-debug.apk
 
       # - name: Upload to gdrive
       #   uses: adityak74/google-drive-upload-git-action@main
@@ -59,8 +64,8 @@ jobs:
         uses: actions/download-artifact@v3
         id: download
         with:
-         name: 'my-artifact'
-         path: path/to/artifacts
+         name: 'release'
+         path: android/app/build/outputs/apk/debug/app-debug.apk
 
       - name: 'Echo download path'
         run: echo ${{steps.download.outputs.download-path}}
