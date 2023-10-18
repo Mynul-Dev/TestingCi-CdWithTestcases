@@ -7,6 +7,9 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write
+      discussions: write
     runs-on: ubuntu-latest
 
     steps:
@@ -41,30 +44,50 @@ jobs:
         run: |
           cd ./android
           ./gradlew assemble
+      # - name: Upload application
+      #   uses: actions/upload-artifact@v2
+      #   id: create_release
+      #   with:
+      #     name: release
+      #     path: android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Tag the repository
+        id: tag
+        run: |
+         # See https://docs.github.com/en/get-started/using-git/dealing-with-special-characters-in-branch-and-tag-names
+         TAG=v$(date -Iseconds | sed 's/[T:\+]/-/g')
+         echo "$TAG"
+         echo "tag=$TAG" >> $GITHUB_OUTPUT
+         git tag -a $TAG -m "Published version $TAG" ${GITHUB_SHA}
+         git push origin $TAG      
       - name: Upload application
-        uses: actions/upload-artifact@v2
+        uses: softprops/action-gh-release@v1
+        id: create_release
         with:
-          name: release
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-      - name: Upload public folder to Google Drive
-        uses: Jodebu/upload-to-drive@master
-        id: driveUpload
-        with:
-            target: public
-            credentials: ${{ secrets.CREDENTIALS}}
-            folder: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94?submissionGuid=5222fb56-94f5-45e9-9f8b-277f03d1e52f
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: android/app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Server port, default 25:
+          # Optional whether this connection use TLS (default is true if server_port is 465)
+      # - name: Upload public folder to Google Drive
+      #   uses: Jodebu/upload-to-drive@master
+      #   id: driveUpload
+      #   with:
+      #       target: public
+      #       credentials: ${{ secrets.CREDENTIALS}}
+      #       folder: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94?submissionGuid=5222fb56-94f5-45e9-9f8b-277f03d1e52f
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: ${{ secrets.SMTP_PORT }}
-          secure: true
-          username: ${{secrets.SMTP_USERNAME}}
+          server_address: smtp.gmail.com
+          server_port: 587
+          # secure: true
+          username: mynulislamridoy
           password: ${{secrets.SMTP_PASSWORD}}
           subject: "Build and Deploy Notification"
           to: mynulislamridoy@gmail.com
           # Required sender full name (address can be skipped):
           from: homeexercise8@gmail.com
           # <user@example.com>
-          body: "The build is complete. You can download the APK from ${{ steps.driveUpload.outputs.link }}"
+          body: "The build is complete. You can download the APK from ${{ steps.create_release.outputs}}."
 
