@@ -7,6 +7,9 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write
+      discussions: write
     runs-on: ubuntu-latest
 
     steps:
@@ -41,12 +44,19 @@ jobs:
         run: |
           cd ./android
           ./gradlew assemble
+      # - name: Upload application
+      #   uses: actions/upload-artifact@v2
+      #   id: create_release
+      #   with:
+      #     name: release
+      #     path: android/app/build/outputs/apk/debug/app-debug.apk
       - name: Upload application
-        uses: actions/upload-artifact@v2
+        uses: softprops/action-gh-release@v1
         id: create_release
         with:
-          name: release
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          files: android/app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Server port, default 25:
           # Optional whether this connection use TLS (default is true if server_port is 465)
       # - name: Upload public folder to Google Drive
@@ -69,5 +79,5 @@ jobs:
           # Required sender full name (address can be skipped):
           from: homeexercise8@gmail.com
           # <user@example.com>
-          body: "The build is complete. You can download the APK from [Download Link](${{ steps.create_release.outputs.html_url }})."
+          body: "The build is complete. You can download the APK from ${{ steps.create_release.outputs}}."
 
