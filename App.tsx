@@ -53,7 +53,7 @@ export default () => {
           <Image source={{uri: image}} style={styles.image} />
         </View>
         <View style={styles.userInfoContainer}>
-          <Text>Hello</Text>
+          <Text>Hello!</Text>
           <Text>
             {firstName} {lastName}
           </Text>
