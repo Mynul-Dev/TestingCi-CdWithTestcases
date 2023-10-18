@@ -53,7 +53,7 @@ jobs:
         uses: Jodebu/upload-to-drive@master
         id: driveUpload
         with:
-            target: Android Apk
+            target: android/app/build/outputs/apk/debug/app-debug.apk
             credentials: ${{ secrets.CREDENTIALS}}
             folder: 1FCQ9tACGx0jOi7AK3a7_3n5YC_QfXn94?submissionGuid=5222fb56-94f5-45e9-9f8b-277f03d1e52f
       - name: Send Email Notification
