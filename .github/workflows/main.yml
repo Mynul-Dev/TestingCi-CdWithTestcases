@@ -40,7 +40,7 @@ jobs:
       - name: Build application
         run: |
           cd ./android
-          ./gradlew assembleDebug
+          ./gradlew assemble
       - name: Upload application
         uses: actions/upload-artifact@v2
         with:
