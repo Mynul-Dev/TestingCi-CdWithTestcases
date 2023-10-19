@@ -44,14 +44,6 @@ jobs:
         with:
           name: Build
           path: android/app/build/outputs/apk/debug/app-debug.apk    
- 
-  deploy:
-    needs: build
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-      
-    steps:
       - name: upload artifact to Firebase App Distribution
         id: testing_outputs
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -60,7 +52,11 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: testers
           file: android/app/build/outputs/apk/debug/app-debug.apk 
-
+      - name: Print all outputs of previous step
+        run: |
+          echo ${{steps.testing_outputs.outputs.FIREBASE_CONSOLE_URI}}
+          echo ${{steps.testing_outputs.outputs.TESTING_URI}}
+          echo ${{steps.testing_outputs.outputs.BINARY_DOWNLOAD_URI}}    
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
         with:
@@ -72,14 +68,21 @@ jobs:
           to: mynulislamridoy@gmail.com
           from: homeexercise8@gmail.com
           body: |
-               Dear Sir/Mam,
+                 Dear Sir/Mam,
+  
+                 These links provide direct access to the updated version of   app.Use any of these links to download and test the app
+  
+                 **Firebase Console URI:** ${{ steps.testing_outputs.outputs.FIREBASE_CONSOLE_URI }}  
+                 **App URI:** ${{ steps.testing_outputs.outputs.TESTING_URI }}  
+                 **Binary Download URI:** ${{ steps.testing_outputs.outputs.BINARY_DOWNLOAD_URI }}
+      
+                 We encourage you to explore these new features and functionalities and Let us know what you think.          
 
-               These links provide direct access to the updated version of   app.Use any of these links to download and test the app
 
-               **Firebase Console URI:** ${{ steps.testing_outputs.outputs.FIREBASE_CONSOLE_URI }}  
-               **App URI:** ${{ steps.testing_outputs.outputs.TESTING_URI }}  
-               **Binary Download URI:** ${{ steps.testing_outputs.outputs.BINARY_DOWNLOAD_URI }}
-    
-               We encourage you to explore these new features and functionalities and Let us know what you think.
-    
-            
+
+
+  
+
+      
+              
+          
