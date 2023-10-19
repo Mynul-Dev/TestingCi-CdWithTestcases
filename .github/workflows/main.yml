@@ -44,6 +44,14 @@ jobs:
         with:
           name: Build
           path: android/app/build/outputs/apk/debug/app-debug.apk    
+ 
+  deploy:
+    needs: build
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+      
+    steps:
       - name: upload artifact to Firebase App Distribution
         id: testing_outputs
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -52,70 +60,26 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: testers
           file: android/app/build/outputs/apk/debug/app-debug.apk 
-      - name: Print all outputs of previous step
-        run: |
-          echo ${{steps.testing_outputs.outputs.FIREBASE_CONSOLE_URI}}
-          echo ${{steps.testing_outputs.outputs.TESTING_URI}}
-          echo ${{steps.testing_outputs.outputs.BINARY_DOWNLOAD_URI}}    
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #    name: Build
-      #    path: android/app/build/outputs/apk/debug/app-debug.apk    
-  # deploy:
-  #   needs: build
-  #   permissions:
-  #     contents: write
-  #   runs-on: ubuntu-latest
-      
-  #   steps:
-  #     - name: Download Build Artifact
-  #       uses: actions/download-artifact@v3
-  #       id: download
-  #       with:
-  #         name: Build
-  #         path: build              
-  #     - run: zip -r build.zip build/
-  #     - uses: ncipollo/release-action@v1
-  #       with:
-  #        artifacts: "build.zip"
-  #        allowUpdates: true
-         
-      
-  #     # - name: Upload application
-  #     #   uses: actions/upload-artifact@v2
-  #     #   id: create_release
-  #     #   with:
-  #     #    name: Build
-  #     #    path: dist
 
-  #     # - name: Download application
-  #     #   uses: actions/download-artifact@v3
-  #     #   id: download
-  #     #   with:
-  #     #    name: Build
-  #     #    path: build
+      - name: Send Email Notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: mynulislamridoy
+          password: ${{secrets.SMTP_PASSWORD}}
+          subject: "A New Build Released Check It Out"
+          to: mynulislamridoy@gmail.com
+          from: homeexercise8@gmail.com
+          body: |
+               Dear Sir/Mam,
 
-  #     - name: 'Echo download path'
-  #       run: echo ${{steps.download.outputs.download-path}}
-  #     - name: upload artifact to Firebase App Distribution
-  #       uses: wzieba/Firebase-Distribution-Github-Action@v1
-  #       with:
-  #         appId: ${{secrets.FIREBASE_APP_ID}}
-  #         serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-  #         groups: testers
-  #         file: android/app/build/outputs/apk/debug/app-debug.apk
-  #     - name: Send Email Notification
-  #       uses: dawidd6/action-send-mail@v3
-  #       with:
-  #         server_address: smtp.gmail.com
-  #         server_port: 587
-  #         username: mynulislamridoy
-  #         password: ${{secrets.SMTP_PASSWORD}}
-  #         subject: "Build and Deploy Notification"
-  #         to: mynulislamridoy@gmail.com
-  #         from: homeexercise8@gmail.com
-  #         body: ${{steps.download.outputs.download_link}}
+               These links provide direct access to the updated version of   app.Use any of these links to download and test the app
 
-
-
-          
+               **Firebase Console URI:** ${{ steps.testing_outputs.outputs.FIREBASE_CONSOLE_URI }}  
+               **App URI:** ${{ steps.testing_outputs.outputs.TESTING_URI }}  
+               **Binary Download URI:** ${{ steps.testing_outputs.outputs.BINARY_DOWNLOAD_URI }}
+    
+               We encourage you to explore these new features and functionalities and Let us know what you think.
+    
+            
