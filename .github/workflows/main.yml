@@ -65,7 +65,7 @@ jobs:
           username: mynulislamridoy
           password: ${{secrets.SMTP_PASSWORD}}
           subject: "A New Build Released Check It Out"
-          to: mynulislamridoy@gmail.com
+          to: mynul.ir@tudotechnologies.com
           from: homeexercise8@gmail.com
           body: |
                  Dear Sir/Mam,
