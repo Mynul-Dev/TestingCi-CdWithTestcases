@@ -80,7 +80,13 @@ jobs:
 
       - name: 'Echo download path'
         run: echo ${{steps.download.outputs.download-path}}
-
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: testers
+          file: app/build/outputs/apk/release/app-release-unsigned.apk
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
         with:
