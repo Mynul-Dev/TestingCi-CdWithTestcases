@@ -40,7 +40,6 @@ jobs:
         run: |
           cd ./android
           ./gradlew assemble
-
       - uses: actions/upload-artifact@v3
         with:
          name: Build
@@ -62,6 +61,8 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
          artifacts: "build.zip"
+         allowUpdates: true
+         
       
       # - name: Upload application
       #   uses: actions/upload-artifact@v2
@@ -90,8 +91,5 @@ jobs:
           subject: "Build and Deploy Notification"
           to: mynulislamridoy@gmail.com
           from: homeexercise8@gmail.com
-          body: ${{steps.download.outputs.download-path}}
+          body: ${{steps.download.outputs.download_link}}
 
-
-
-          
